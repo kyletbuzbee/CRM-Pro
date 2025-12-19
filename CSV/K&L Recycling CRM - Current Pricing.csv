@@ -1,0 +1,58 @@
+Category,Item,Min ($/lb),Max ($/lb)
+ALUMINUM,Aluminum Cans,$0.75,$0.77
+,Aluminum 6063,$0.78,$0.88
+,Aluminum Clips,$0.78,$0.88
+,Aluminum Wheel – Clean,$0.78,$0.88
+,Aluminum Truck Wheels,$0.63,$0.73
+,Aluminum Wheel – Dirty,$0.63,$0.73
+,Aluminum Radiators – Clean,$0.58,$0.63
+,Aluminum Sheet,$0.48,$0.58
+,Aluminum Painted Siding,$0.48,$0.58
+,Aluminum 6061,$0.48,$0.58
+,Aluminum Cast,$0.48,$0.57
+,Aluminum Chrome Wheel,$0.48,$0.58
+,Aluminum Radiators – Dirty,$0.45,$0.50
+,Aluminum Turnings/Shavings,$0.31,$0.35
+,Aluminum Die Cast,$0.29,$0.34
+,Aluminum Breakage,$0.19,$0.24
+COPPER,Bare Bright Copper,$4.38,$4.48
+,#1 Copper,$4.28,$4.38
+,#2 Copper,$4.19,$4.29
+,85% MCM,$2.55,$2.58
+,ICW #1 65%,$2.37,$2.40
+,ICW #2 45%,$1.55,$1.58
+,EC Wire,$1.15,$1.25
+,ICW #3 30% (Low Grade),$0.92,$0.95
+,Insulated Wire Aluminum (Neoprene),$0.46,$0.51
+,Christmas Lights,$0.36,$0.41
+,Data/Cat 5 ICW,$0.15,$0.18
+BRASS,Red Brass,$2.97,$3.12
+,Hard Brass,$2.97,$3.12
+,Yellow Brass – Clean,$2.59,$2.69
+,Yellow Brass – Dirty,$2.29,$2.37
+,Brass Turnings/Shavings,$1.87,$1.95
+,Mixed Brass Shells,$1.57,$1.65
+RADIATORS,Brass/Copper Radiators – Clean,$2.66,$2.76
+,Aluminum/Copper Reefer – Clean,$1.89,$1.99
+,Brass/Copper Radiators – Dirty,$1.56,$1.62
+,Heater Core,$1.26,$1.32
+,Aluminum/Copper Reefer – Dirty,$1.05,$1.10
+,Aluminum/Copper Reefer Ends,$0.66,$0.76
+STAINLESS,Stainless – Clean,$0.12,$0.17
+,Stainless Turnings/Shavings,$0.10,$0.15
+,Stainless – Dirty,$0.05,$0.07
+STEEL/IRON,ACSR Aluminum Coated Steel Reinforced,$0.45,$0.51
+,Short Iron,$0.08,—
+,Long Iron/Tin,$0.05,—
+LEAD,Soft Lead – Clean,$0.37,$0.41
+,Indoor Range Lead,$0.25,$0.30
+,Lead Acid Battery,$0.09,$0.11
+,Lead Wheel Weights,$0.09,$0.13
+,Steel Case Battery (Lead Acid),$0.05,$0.07
+MOTORS,Alternators,$0.31,$0.36
+,Electric Motors,$0.23,$0.28
+,Large Electric Motors,$0.18,$0.21
+,Shred ICW Motors,$0.18,$0.21
+,Sealed Units,$0.11,$0.14
+,Aluminum Nose Starter,$0.09,$0.13
+,Steel Nose Starter,$0.09,$0.13

@@ -1,0 +1,9 @@
+{
+  "name": "K-L Recycling CRM Pro",
+  "description": "Sophisticated CRM dashboard for K-L Recycling, managing prospects, roll-off container routes, and AI-driven sales insights in Tyler, TX.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
