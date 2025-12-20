@@ -53,26 +53,57 @@ export const DataImport: React.FC<DataImportProps> = ({ onDataImported }) => {
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
-      setImportResult(null);
+      const selectedFile = e.target.files[0];
+      if (selectedFile.type === 'text/csv' || selectedFile.type === 'application/json' || selectedFile.name.endsWith('.csv') || selectedFile.name.endsWith('.json')) {
+        setFile(selectedFile);
+        setImportResult(null);
+      } else {
+        setImportResult({ success: false, message: 'Please upload a CSV or JSON file.' });
+      }
     }
   };
 
+  // ✅ FIX: Robust CSV parser that handles commas inside quotes
   const parseCSV = (csvText: string): any[] => {
-    const lines = csvText.split('\n').filter(line => line.trim());
+    const lines = csvText.split('\n');
     if (lines.length < 2) return [];
 
-    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-    const rows = lines.slice(1).map(line => {
-      const values = line.split(',').map(v => v.trim().replace(/"/g, ''));
-      const obj: any = {};
-      headers.forEach((header, index) => {
-        obj[header] = values[index] || '';
-      });
-      return obj;
-    });
+    // Helper to parse a single line respecting quotes
+    const parseLine = (text: string) => {
+      const result = [];
+      let current = '';
+      let inQuote = false;
 
-    return rows;
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        if (char === '"') {
+          inQuote = !inQuote;
+        } else if (char === ',' && !inQuote) {
+          result.push(current.trim().replace(/^"|"$/g, ''));
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      result.push(current.trim().replace(/^"|"$/g, ''));
+      return result;
+    };
+
+    // Parse headers and rows
+    const headers = parseLine(lines[0]);
+
+    return lines.slice(1)
+      .filter(line => line.trim())
+      .map(line => {
+        const values = parseLine(line);
+        const obj: any = {};
+        headers.forEach((header, index) => {
+          // Clean header key and assign value
+          const cleanHeader = header.trim();
+          if (cleanHeader) obj[cleanHeader] = values[index] || '';
+        });
+        return obj;
+      });
   };
 
   const validateProspect = (row: any): Prospect | null => {
@@ -206,12 +237,18 @@ export const DataImport: React.FC<DataImportProps> = ({ onDataImported }) => {
     }
   };
 
-  const handleImport = () => {
+  const handleImport = async () => {
     if (importResult?.success && importResult.data) {
-      StorageHelper.saveProspects(importResult.data.prospects);
-      StorageHelper.savePrices(importResult.data.prices);
-      onDataImported(importResult.data.prospects, importResult.data.prices, importResult.data.outreach);
-      setImportResult({ success: true, message: 'Data imported and saved successfully!' });
+      try {
+        // Wait for backend sync to complete
+        await onDataImported(importResult.data.prospects, importResult.data.prices, importResult.data.outreach);
+        setImportResult({ success: true, message: 'Data imported and saved successfully!' });
+      } catch (error) {
+        setImportResult({
+          success: false,
+          message: `Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+        });
+      }
     }
   };
 
@@ -272,6 +309,7 @@ Cans,Aluminum,0.75,0.77`;
               onChange={handleFileSelect}
               className="hidden"
               id="file-upload"
+              data-testid="file-input"
             />
             <label
               htmlFor="file-upload"

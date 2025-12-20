@@ -44,7 +44,7 @@ export const GoogleSheetsService = {
       const response = await fetch(`${API_URL}?action=getPricing`);
       const data = await response.json();
       if (!Array.isArray(data)) return SCRAP_PRICES;
-      
+
       return data.map((row: any) => ({
         category: row.category || 'General',
         item: row.item,
@@ -69,8 +69,10 @@ export const GoogleSheetsService = {
 
       const response = await fetch(API_URL, {
         method: 'POST',
+        // FIX: Removed 'application/json' to prevent CORS preflight error
+        // The browser will default to text/plain or we can explicitly set it
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/plain;charset=utf-8',
         },
         body: JSON.stringify({
           action: 'logVisit',
@@ -113,7 +115,7 @@ export const GoogleSheetsService = {
 
   syncProspects: async (prospects: Prospect[]) => {
     try {
-       const response = await fetch(API_URL, {
+      const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ action: 'syncProspects', payload: prospects })

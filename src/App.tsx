@@ -58,6 +58,9 @@ const App: React.FC = () => {
     setPrices(prev => [...prev, ...newPrices]);
     StorageHelper.savePrices([...prices, ...newPrices]);
     // Note: Outreach data is sent to backend but not stored locally for now
+
+    // ✅ Return promise to indicate completion
+    return Promise.resolve();
   };
 
   // Handle add prospect

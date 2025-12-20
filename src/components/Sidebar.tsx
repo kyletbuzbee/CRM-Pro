@@ -113,10 +113,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        // Simple connectivity check
-        const response = await fetch('https://script.google.com/macros/', { method: 'HEAD' });
+        // FIX: Check your actual API URL, not the generic Google URL
+        // We use 'no-cors' mode just to check if the network request can go out
+        await fetch(import.meta.env.VITE_GOOGLE_SCRIPT_URL, {
+          method: 'GET',
+          mode: 'no-cors'
+        });
         setIsOnline(true);
-      } catch {
+      } catch (e) {
+        // Only set offline if the network request actually fails (e.g. disconnected wifi)
+        console.warn("Connection check failed", e);
         setIsOnline(false);
       }
     };

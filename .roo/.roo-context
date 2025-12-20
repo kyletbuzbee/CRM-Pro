@@ -1,0 +1,47 @@
+# Project Context: K&L Recycling CRM (CRM-Pro)
+
+## 1. Project Overview
+- **Goal:** A custom CRM for a recycling business to manage prospects, pricing, and outreach.
+- **Architecture:** Serverless integration between a React Frontend and Google Sheets (acting as the Database/Backend).
+- **Key Constraint:** The backend is **Google Apps Script (GAS)**, which has specific CORS and deployment limitations.
+
+## 2. Tech Stack
+- **Frontend:** React (Vite), TypeScript, Tailwind CSS, Lucide React (Icons), Recharts (Charts).
+- **Backend:** Google Apps Script (.gs files), serving JSON via `ContentService`.
+- **Database:** Google Sheets (Tabs: "Prospects", "Outreach", "Current Pricing").
+
+## 3. Critical Integration Rules (Do Not Break)
+### Backend (Google Apps Script)
+- **Entry Points:** `doGet(e)` for reads, `doPost(e)` for writes.
+- **Deployments:** Must be deployed as a Web App with access set to "Anyone" (anonymous).
+- **Response Format:** Always return `ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON)`.
+- **Unique Constraint:** You cannot have duplicate function names across different `.gs` files (e.g., `logVisit` must not exist in both `Code.gs` and `SidebarAPI.gs`).
+
+### Frontend (React Service Layer)
+- **File:** `src/services/googleSheetsService.ts`
+- **CORS Handling:** - GET requests: Standard `fetch`.
+  - POST requests: Must send `body: JSON.stringify(payload)` but **avoid** setting `Content-Type: application/json` header to prevent preflight OPTIONS requests (which GAS rejects).
+  - Use `text/plain` or let the browser default to `text/plain` for POSTs.
+- **Date Handling:** Google Sheets dates often return as objects or strings. Always validate/format dates on the frontend before display.
+
+## 4. Folder Structure & Key Files
+- `src/services/googleSheetsService.ts`: Main bridge to the backend. Contains the `API_URL`.
+- `src/types/index.ts`: Shared interfaces (`Prospect`, `Price`, `ContactStatus`).
+- `backend/Code.gs`: Main API router (`doGet`, `doPost`).
+- `backend/Config.gs`: Configuration for Sheet Tab Names. **Must match Sheet tabs exactly.**
+- `backend/SidebarAPI_Fixed.gs`: Logic for route optimization and specific CRM tasks.
+
+## 5. Coding Standards
+- **TypeScript:** Strict mode. Use defined interfaces, avoid `any`.
+- **Styling:** Tailwind CSS utility classes.
+- **State Management:** React `useState` / `useEffect` for now. Move to Context or Zustand if complexity grows.
+- **Error Handling:** Fail gracefully. If the API fails (network error), return `INITIAL_PROSPECT_DATA` or empty arrays rather than crashing the UI.
+
+## 6. Common Tasks
+- **Adding a Column:** 1. Add header to Google Sheet.
+  2. Update `backend/Code.gs` in `getSheetData()` to map the new header to a JSON key.
+  3. Update `src/types/index.ts` to include the new field.
+  4. Update `src/services/googleSheetsService.ts` to map the incoming JSON.
+
+- **Deploying Backend:**
+  - Always create a **New Version** when deploying in GAS editor (`Deploy > Manage Deployments > Edit > Version: New`).
